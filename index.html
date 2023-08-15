@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="display-container">
+        <p class="book-number">Book <span id="current-book-number"></span> / <span id="total-books"></span></p>
+        <div id="display">
+            <h2>Title: <span id="title"></span></h2>
+            <h3>Author: <span id="author"></span></h3>
+            <img id="image" src="" alt="Book Cover">
+            <p>Category: <span id="category"></span></p>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <div class="button-row">
+            <button onclick="First()">First</button>
+            <button onclick="Next()">Next</button>
+            <button onclick="Previous()">Previous</button>
+            <button onclick="Last()">Last</button>
+        </div>
+        <div class="button-row">
+            <button onclick="Reset()">Reset</button>
+            <button onclick="All()">All</button>
+            <button onclick="Reverse()">Reverse</button>
+        </div>
+    </div>
+
+    <div id="all-books-table" class="hidden">
+        <table class="visible">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Image</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody id="all-books-body"></tbody>
+        </table>
+    </div>
+    <script>
+        const MY_SERVER = "http://localhost:3000/library";
+        let books = [];
+        let index = 0;
+
+        async function getData() {
+            books = await fetch(MY_SERVER).then(r => r.json());
+            updateDisplay();
+        }
+
+        
+        async function updateDisplay() {
+            const currentBook = books[index];
+            const titleElement = document.getElementById("title");
+            const authorElement = document.getElementById("author");
+            const imageElement = document.getElementById("image");
+            const categoryElement = document.getElementById("category");
+
+            const currentBookNumberElement = document.getElementById("current-book-number");
+            const totalBooksElement = document.getElementById("total-books");
+
+            currentBookNumberElement.textContent = index + 1;
+            totalBooksElement.textContent = books.length;
+
+            titleElement.textContent = currentBook.title;
+            authorElement.textContent = currentBook.author;
+            imageElement.src = currentBook.img;
+            categoryElement.textContent = currentBook.category;
+        }
+
+        function First() {
+            index = 0;
+            updateDisplay();
+        }
+
+        function Next() {
+            if (index < books.length - 1) {
+                index++;
+                updateDisplay();
+            }
+        }
+        function Previous() {
+        if (index > 0) {
+            index--;
+            updateDisplay();
+        }
+    }
+
+    function Last() {
+        index = books.length - 1;
+        updateDisplay();
+    }
+    function saveToLocalStorage() {
+        localStorage.setItem("books", JSON.stringify(books));
+        localStorage.setItem("currentIndex", index);
+    }
+
+    function loadFromLocalStorage() {
+        const savedBooks = JSON.parse(localStorage.getItem("books"));
+        if (savedBooks) {
+            books = savedBooks;
+            index = parseInt(localStorage.getItem("currentIndex")) || 0;
+            updateDisplay();
+        }
+    }
+    function Reset() {
+        localStorage.removeItem("books");
+        localStorage.removeItem("currentIndex");
+        books = [];
+        index = 0;
+        updateDisplay();
+    }
+    async function All() {
+            const allBooksTable = document.getElementById("all-books-table");
+            const allBooksBody = document.getElementById("all-books-body");
+
+            allBooksBody.innerHTML = ""; // Clear previous content
+
+            for (const book of books) {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${book.id}</td>
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td><img src="${book.img}" alt="Book Cover" style="max-width: 100px; max-height: 100px;"></td>
+                    <td>${book.category}</td>
+                `;
+                allBooksBody.appendChild(row);
+            }
+
+            allBooksTable.classList.add("visible");
+            document.getElementById("display").classList.add("hidden");
+        }
+
+        async function Reverse() {
+            const allBooksTable = document.getElementById("all-books-table");
+            const allBooksBody = document.getElementById("all-books-body");
+
+            allBooksBody.innerHTML = ""; // Clear previous content
+
+            for (let i = books.length - 1; i >= 0; i--) {
+                const book = books[i];
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${book.id}</td>
+                    <td>${book.title}</td>
+                    <td>${book.author}</td>
+                    <td><img src="${book.img}" alt="Book Cover" style="max-width: 100px; max-height: 100px;"></td>
+                    <td>${book.category}</td>
+                `;
+                allBooksBody.appendChild(row);
+            }
+
+            allBooksTable.classList.add("visible");
+            document.getElementById("display").classList.add("hidden");
+        }
+
+        function hideAllBooksTable() {
+            const allBooksTable = document.getElementById("all-books-table");
+            allBooksTable.classList.remove("visible");
+            document.getElementById("display").classList.remove("hidden");
+        }
+        getData();
+    </script>
+</body>
+</html>

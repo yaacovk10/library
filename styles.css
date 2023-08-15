@@ -1,0 +1,40 @@
+/* styles.css */
+#image {
+    max-width: 5%; /* 1/20 of the width */
+    max-height: 20vh; /* 1/5 of the height */
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.display-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.book-number {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Hide the table headers by default */
+#all-books-table table th {
+    display: none;
+}
+
+#all-books-table.visible table th {
+    display: table-cell;
+}
+
+#all-books-table {
+    display: flex;
+    justify-content: center;
+}

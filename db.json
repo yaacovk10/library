@@ -1,0 +1,27 @@
+{
+  "library": [
+    {
+      "id": 1,
+      "title": "Le Petit Prince",
+      "author": "Antoine de Saint-Exupéry",
+      "img":"./imgs/le_petit_prince.jpg",
+      "category":"poetry"
+    },
+    {
+      "id": 2,
+      "title": "le comte de monte cristo",
+      "author": "Alexandre Dumas",
+      "img": "./imgs/le_comte_de_monte_cristo.jpg",
+      "category":"adventure"
+
+    },
+    {
+      "id": 3,
+      "title": "le medecin malge lui",
+      "author": "Moliere",
+      "img": "./imgs/le_medecin_malge_lui.jpg",
+      "category":"theater"
+
+    }
+  ]
+}
